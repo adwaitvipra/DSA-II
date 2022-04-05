@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 typedef struct Node // creating a struct for node
 {
     int mis;
@@ -10,7 +7,7 @@ typedef struct Node // creating a struct for node
 
 typedef node *bst; // typecasting a ptr to node as bst
 
-void intiBST(bst *t)
+void initBST(bst *t)
 {
     *t = NULL;
     return;
@@ -41,7 +38,7 @@ void insertNode(bst *t, int x, char *n)
         return;
     }
 
-    while (!p) // move p until it becomes null
+    while (p) // move p until it becomes null
     {
         if (p->mis == x)
         {
@@ -64,21 +61,21 @@ void insertNode(bst *t, int x, char *n)
 }
 int removeNode(bst *t, int key)
 {
-    return ;
+    return;
 }
 int search(bst t, int key)
 {
-    return ;
+    return;
 }
-void postOrder(bst t) //left right root
+void postOrder(bst t) // left right vlaue
 {
-    return ;
+    return;
 }
 void displayLevel(bst t, int level)
 {
-    return ;
+    return;
 }
 void destroyTree(bst *t)
 {
-    return ;
+    return;
 }
