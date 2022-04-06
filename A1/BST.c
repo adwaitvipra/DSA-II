@@ -1,12 +1,50 @@
-typedef struct Node // creating a struct for node
+#ifndef TEST_H_INCLUDED
+#define TEST_H_INCLUDED
+#include <stdio.h>
+#include <stdlib.h>
+#endif
+#include "defines.h"
+
+int IsEmpty(struct StackNode *st)
 {
-    int mis;
-    char *name;
-    struct Node *left, *right;
-} node;
-
-typedef node *bst; // typecasting a ptr to node as bst
-
+    return st ? 0 : 1;
+}
+int IsFull()
+{
+    int r;
+    struct StackNode *t;
+    t = (struct StackNode *)malloc(sizeof(struct StackNode));
+    r = !t ? 1 : 0; // if t is NULL return 1 that is heap is full else return 0
+    free(t);
+    return r;
+}
+void push(struct StackNode *st, node *x)
+{
+    if (IsFull())
+    {
+        // printf("Stack Overflow!");
+        return;
+    }
+    struct StackNode *t;
+    t = (struct StackNode *)malloc(sizeof(struct StackNode));
+    t->x = x;
+    t->next = st;
+    top = t;
+}
+node *pop(struct StackNode *st)
+{
+    node *x = NULL;
+    if (IsEmpty(st))
+    {
+        // printf("Stack Underflow!\n");
+    }
+    else
+    {
+        top = top->next;
+        x = st->x;
+    }
+    return x;
+}
 void initBST(bst *t)
 {
     *t = NULL;
@@ -20,7 +58,7 @@ void insertNode(bst *t, int x, char *n)
     if (!nn)
     {
         free(nn);
-        printf("Overflow!\n");
+        // printf("Overflow!\n");
         return;
     }
 
@@ -32,9 +70,9 @@ void insertNode(bst *t, int x, char *n)
     p = *t;
     q = NULL;
 
-    if (!p)
+    if (!p) // if tree empty then make root point to nn
     {
-        *t = p;
+        *t = nn;
         return;
     }
 
@@ -67,8 +105,33 @@ int search(bst t, int key)
 {
     return;
 }
-void postOrder(bst t) // left right vlaue
+
+void inorder(bst t)
 {
+    if (t)
+    {
+        inorder(t->left);
+        printf("%d : %s\n", t->mis, t->name);
+        inorder(t->right);
+    }
+}
+void postOrder(bst t) // left right vlaue recursive
+{
+
+    // while(t || !IsEmpty(&top))
+    // {
+    //     if(t)
+    //     {
+    //         printf("%d : %s\n", t->mis,t->name);
+    //         push(&top,t);
+    //         t=t->left;
+    //     }
+    //     else
+    //     {
+    //         t=pop(&top);
+    //         t=t->right;
+    //     }
+    // }
     return;
 }
 void displayLevel(bst t, int level)

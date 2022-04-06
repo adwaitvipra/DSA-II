@@ -1,0 +1,13 @@
+all: try app
+try: main.o header.o
+	cc main.o header.o -o try
+main.o: main.c header.h
+	cc -c main.c
+header.o: header.c
+	cc -c header.c
+app: app.c header.h main.c
+	cc -c app.c
+	cc app.o main.o -o app
+
+clean:
+	rm *.o
