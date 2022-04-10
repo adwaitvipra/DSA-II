@@ -1,10 +1,9 @@
-#ifndef TEST_H_INCLUDED
-#define TEST_H_INCLUDED
 #include <stdio.h>
 #include <stdlib.h>
-#endif
-#include "defines.h"
-
+#include <string.h>
+#include "BST.h"
+// stack functions
+struct StackNode *top = NULL; // global ptr to a stack
 int IsEmpty(struct StackNode *st)
 {
     return st ? 0 : 1;
@@ -22,7 +21,6 @@ void push(struct StackNode *st, node *x)
 {
     if (IsFull())
     {
-        // printf("Stack Overflow!");
         return;
     }
     struct StackNode *t;
@@ -36,7 +34,7 @@ node *pop(struct StackNode *st)
     node *x = NULL;
     if (IsEmpty(st))
     {
-        // printf("Stack Underflow!\n");
+        return x;
     }
     else
     {
@@ -45,100 +43,182 @@ node *pop(struct StackNode *st)
     }
     return x;
 }
+void KillStack(struct StackNode *st)
+{
+    if (!st)
+        return;
+    while (st)
+    {
+        pop(st);
+    }
+}
+// BST functions
+int Height(node *p)
+{
+    int x, y;
+    if (!p)
+        return 0;
+    x = Height(p->left);
+    y = Height(p->right);
+    return x > y ? x + 1 : y + 1;
+}
+node *FindMax(node *p) // inorder predecessor
+{
+    while (p && p->right)
+        p = p->right;
+    return p;
+}
+node *FindMin(node *p) // inorder successor
+{
+    while (p && p->left)
+        p = p->left;
+    return p;
+}
+node *newNode(int x, char *n)
+{
+    node *nn = (node *)malloc(sizeof(node));
+    if (!nn)
+        return NULL;
+    nn->mis = x;
+    for (int i = 0; i < strlen(n); i++)
+        nn->name[i] = n[i];
+    nn->left = nn->right = NULL;
+    return nn;
+}
 void initBST(bst *t)
 {
     *t = NULL;
     return;
 }
-void insertNode(bst *t, int x, char *n)
+node *insertNode(bst *t, int x, char *n) // recursive
 {
-    node *nn = NULL;
-    nn = (node *)malloc(sizeof(node));
 
-    if (!nn)
+    node *p = *t;
+    static node *q = NULL;
+    if (!p)
     {
-        free(nn);
-        // printf("Overflow!\n");
-        return;
-    }
-
-    nn->mis = x;
-    nn->name = n;
-    nn->left = nn->right = NULL;
-
-    node *p, *q; // q is a trailing ptr of
-    p = *t;
-    q = NULL;
-
-    if (!p) // if tree empty then make root point to nn
-    {
-        *t = nn;
-        return;
-    }
-
-    while (p) // move p until it becomes null
-    {
-        if (p->mis == x)
-        {
-            printf("Duplicate Entry!\n");
-            return;
-        }
-
-        q = p; // let q follow p
-        if (p->mis < x)
-            p = p->right;
+        node *nn = newNode(x, n);
+        if (!q) // empty tree
+            *t = nn;
         else
-            p = p->left;
+            return nn;
     }
-
-    if (q->mis < x)
-        q->right = nn;
     else
-        q->left = nn;
-    return;
-}
-int removeNode(bst *t, int key)
-{
-    return;
-}
-int search(bst t, int key)
-{
-    return;
-}
-
-void inorder(bst t)
-{
-    if (t)
     {
-        inorder(t->left);
-        printf("%d : %s\n", t->mis, t->name);
-        inorder(t->right);
+        q = p;
+        if (p->mis < x)
+            p->right = insertNode(&p->right, x, n);
+        else if (p->mis > x)
+            p->left = insertNode(&p->left, x, n);
+        return p;
     }
 }
-void postOrder(bst t) // left right vlaue recursive
+node *removeNode(bst *t, int key) // recursive, will return root node when fully executed
 {
-
-    // while(t || !IsEmpty(&top))
-    // {
-    //     if(t)
-    //     {
-    //         printf("%d : %s\n", t->mis,t->name);
-    //         push(&top,t);
-    //         t=t->left;
-    //     }
-    //     else
-    //     {
-    //         t=pop(&top);
-    //         t=t->right;
-    //     }
-    // }
+    node *link = *t;
+    if (!link) // empty tree or key not found
+        return NULL;
+    // search for node
+    else if (link->mis < key)
+        link->right = removeNode(&(link->right), key);
+    else if (link->mis > key)
+        link->left = removeNode(&(link->left), key);
+    else // node found
+    {
+        // case 1:No child
+        if (!link->right && !link->left)
+        {
+            free(link);
+            link = NULL; // set dangling ptr link to null
+        }
+        // case 2:One child
+        else if (!link->right)
+        {
+            node *temp = NULL;
+            temp = link;
+            link = link->left; // move link to left
+            free(temp);
+            temp = NULL;
+        }
+        else if (!link->left)
+        {
+            node *temp = NULL;
+            temp = link;
+            link = link->right; // move link to right
+            free(temp);
+            temp = NULL;
+        }
+        // case 3: Two childs
+        else
+        {
+            node *temp = NULL;
+            // inorder predecessor or inorder successor
+            temp = FindMin(link->right); // FindMax(link->left);
+            link->mis = temp->mis;
+            link->right = removeNode(&(link->right), temp->mis);
+        }
+    }
+    return link;
+}
+node *search(bst t, int key) // recursive search
+{
+    if (!t) // empty tree or key not found
+        return NULL;
+    if (t->mis == key)
+        return t;
+    else if (t->mis < key)
+        return search(t->right, key);
+    else
+        return search(t->left, key);
+}
+void postorder(bst p) // iterative postorder using stack
+{
+    // there is specific address for negative as well as positive long int and I found that address <-----> long int
+    long int temp = 0;
+    while (p || !IsEmpty(top))
+    {
+        if (p)
+        {
+            push(top, p);
+            p = p->left;
+        }
+        else
+        {
+            temp = (long int)pop(top);
+            if (temp > 0) // address was pushed first time
+            {
+                push(top, (node *)(-temp)); // make addresss negative as it is pushed second time
+                p = ((node *)(temp))->right;
+            }
+            else // address is negative so make the p point on positive value of address by negating negative temp
+            {
+                p = (node *)(-temp);
+                printf("%d : %s\n", p->mis, p->name);
+                p = NULL;
+            }
+        }
+    }
+    KillStack(top);
     return;
 }
 void displayLevel(bst t, int level)
 {
-    return;
+    if (!t)
+        return;
+    if (level == 1)
+    {
+        printf("%d : %s\n", t->mis, t->name);
+    }
+    displayLevel(t->left, level - 1);
+    displayLevel(t->right, level - 1);
 }
-void destroyTree(bst *t)
+void destroyTree(bst *t) // destroying tree by postorder traversal
 {
-    return;
+    node *p = *t;
+    if (!p)
+        return;
+    destroyTree(&(p->left));
+    destroyTree(&(p->right));
+    printf("%d : %s, deleting...\n", p->mis, p->name);
+    free(p);
 }

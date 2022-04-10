@@ -1,23 +1,160 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include "defines.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "BST.h"
+#define MAX_BST 10
+// driver code for program
 int main()
 {
-    bst t;
-    initBST(&t);
-    insertNode(&t, 1, "A");
-    insertNode(&t, 0, "B");
-    insertNode(&t, 10, "C");
-    insertNode(&t, 14, "D");
-    insertNode(&t, 15, "E");
-    insertNode(&t, 13, "F");
-    insertNode(&t, 5, "G");
-    insertNode(&t, 2, "H");
-    insertNode(&t, 7, "I");
-    insertNode(&t, 700, "J");
-    printf("\n\n");
-    inorder(t);
-    printf("\n\n");
+    char str[50];
+    bst trees[MAX_BST]={NULL}; // creating a array of BST's
+    int num_bst = -1;
+    int isInit[MAX_BST] = {0};
+    int choice;
+    printf("**************** Binary Search Tree ****************\n");
+    do
+    {
+        // driver menu
+        printf("**************** Main Menu ****************\n");
+        printf("1. Create a BST\n");
+        printf("2. Initialize a BST\n");
+        printf("3. Traverse a BST\n");
+        printf("4. Insert a Node\n");
+        printf("5. Remove a Node\n");
+        printf("6. Search a Node\n");
+        printf("7. Display Nodes on a level\n");
+        printf("8. Destroy a BST\n");
+        printf("9. Show Available BST's\n");
+        printf("10. Exit\n");
+        printf("Enter Your Choice:");
+        scanf(" %d", &choice);
+        int x;
+        switch (choice)
+        {
+        case 1:
+
+            if (num_bst < MAX_BST - 1)
+            {
+                num_bst++;
+                printf("BST Created Succesfully\nBST No.: %d\n\n", num_bst);
+            }
+            else
+                printf("Overflow!\n\n");
+            break;
+        case 2:
+            printf("Enter BST No.:");
+            scanf(" %d", &x);
+            if ((x >= 0 && x <= num_bst) && !isInit[x]) // check for valid index and if it is initialized already
+            {
+                initBST(&trees[x]);
+                isInit[x]++;
+                printf("BST Initialized Succesfully\n\n");
+            }
+            else
+                printf("BST not Found or BST initialized already!\n\n");
+            break;
+        case 3:
+            printf("Enter BST No.:");
+            scanf(" %d", &x);
+            if (x >= 0 && x <= num_bst && isInit[x])
+            {
+                postorder(trees[x]);
+                printf("\n\n");
+            }
+            else
+                printf("BST not Found or BST uninitialized!\n\n");
+            break;
+        case 4:
+            printf("Enter BST No.:");
+            scanf(" %d", &x);
+            if (x >= 0 && x <= num_bst && isInit[x])
+            {
+                int d;
+                printf("Enter MIS:");
+                scanf(" %d", &d);
+                printf("Enter Name:");
+                scanf("%s", str);
+                insertNode(&trees[x], d, str);
+            }
+            else
+                printf("BST not Found or BST uninitialized!\n\n");
+            break;
+        case 5:
+            printf("Enter BST No.:");
+            scanf(" %d", &x);
+            if (x >= 0 && x <= num_bst && isInit[x])
+            {
+                int d;
+                printf("Enter MIS:");
+                scanf(" %d", &d);
+                trees[x] = removeNode(&trees[x], d);
+            }
+            else
+                printf("BST not Found or BST uninitialized!\n\n");
+            break;
+        case 6:
+            printf("Enter BST No.:");
+            scanf(" %d", &x);
+            if (x >= 0 && x <= num_bst && isInit[x])
+            {
+                int d;
+                printf("Enter MIS:");
+                scanf(" %d", &d);
+                node *temp = search(trees[x], d);
+                if (!temp)
+                    printf("Not Found!\n");
+                else
+                    printf("%d : %s\t\tfound in BST\n", temp->mis, temp->name);
+            }
+            else
+                printf("BST not Found or BST uninitialized!\n\n");
+            break;
+        case 7:
+            printf("Enter BST No.:");
+            scanf(" %d", &x);
+            if (x >= 0 && x <= num_bst && isInit[x])
+            {
+                int d;
+                printf("Enter Level No.:");
+                scanf(" %d", &d);
+                displayLevel(trees[x], d);
+            }
+            else
+                printf("BST not Found or BST uninitialized!\n\n");
+            break;
+        case 8:
+            printf("Enter BST No.:");
+            scanf(" %d", &x);
+            if (x >= 0 && x <= num_bst && isInit[x])
+            {
+                destroyTree(&trees[x]);
+                printf("BST No. : %d, Destroyed...\n\n", x);
+                trees[x] = 0;
+            }
+            else
+                printf("BST not Found or BST uninitialized!\n\n");
+            break;
+        case 9:
+            if (num_bst >= 0)
+            {
+                for (int i = 0; i <= num_bst; i++)
+                {
+                    if (trees[i] != 0)
+                        printf("BST No. :%d\n", i);
+                }
+            }
+            break;
+        default:
+            if (choice != 10)
+                printf("Wrong Choice!\nTry Again!\n\n");
+            else
+                printf("Thank You!\n\n");
+            break;
+        }
+        getchar();
+        printf("\nPress Any Key\n");
+        getchar();
+        system("clear");
+    } while (choice != 10);
     return 0;
 }
