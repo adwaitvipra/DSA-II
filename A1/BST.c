@@ -92,20 +92,18 @@ void initBST(bst *t)
 }
 node *insertNode(bst *t, int x, char *n) // recursive
 {
-
+    static int flag=0;
     node *p = *t;
-    static node *q = NULL;
     if (!p)
     {
         node *nn = newNode(x, n);
-        if (!q) // empty tree
+        if (!flag) // empty tree
             *t = nn;
-        else
-            return nn;
+        return nn;
     }
     else
     {
-        q = p;
+        flag=1;
         if (p->mis < x)
             p->right = insertNode(&p->right, x, n);
         else if (p->mis > x)

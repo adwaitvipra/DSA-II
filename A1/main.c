@@ -7,10 +7,11 @@
 int main()
 {
     char str[50];
-    bst trees[MAX_BST]={NULL}; // creating a array of BST's
-    int num_bst = -1;
+    bst trees[MAX_BST]={0}; // creating a array of BST's
+    int num_bst = 0;
     int isInit[MAX_BST] = {0};
     int choice;
+    int x;
     printf("**************** Binary Search Tree ****************\n");
     do
     {
@@ -28,15 +29,14 @@ int main()
         printf("10. Exit\n");
         printf("Enter Your Choice:");
         scanf(" %d", &choice);
-        int x;
         switch (choice)
         {
         case 1:
 
-            if (num_bst < MAX_BST - 1)
+            if (num_bst < MAX_BST)
             {
-                num_bst++;
                 printf("BST Created Succesfully\nBST No.: %d\n\n", num_bst);
+                num_bst++;
             }
             else
                 printf("Overflow!\n\n");
@@ -58,7 +58,10 @@ int main()
             scanf(" %d", &x);
             if (x >= 0 && x <= num_bst && isInit[x])
             {
-                postorder(trees[x]);
+                if (!trees[x])
+                    printf("Empty Tree!\n");
+                else
+                    postorder(trees[x]);
                 printf("\n\n");
             }
             else
@@ -129,7 +132,8 @@ int main()
             {
                 destroyTree(&trees[x]);
                 printf("BST No. : %d, Destroyed...\n\n", x);
-                trees[x] = 0;
+                isInit[x]--;
+                trees[x] = NULL;
             }
             else
                 printf("BST not Found or BST uninitialized!\n\n");
@@ -139,7 +143,7 @@ int main()
             {
                 for (int i = 0; i <= num_bst; i++)
                 {
-                    if (trees[i] != 0)
+                    if (trees[i] != NULL)
                         printf("BST No. :%d\n", i);
                 }
             }
