@@ -1,6 +1,9 @@
+#ifndef STD_H
+#define STD_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#endif
 #include "BST.h"
 #define MAX_BST 10
 // driver code for program
