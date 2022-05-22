@@ -126,7 +126,7 @@ void postorder(bst p) // iterative postorder using stack
     return;
 }
 
-void CreatePost(int post[], int n, bst *root)
+void postorder2bst(int post[], int n, bst *root)
 {
     node *t = NULL, *p = NULL;
     int i = n - 1;
@@ -164,10 +164,10 @@ int main()
     int n;
     printf("Enter No. Elements in BST:");
     scanf(" %d", &n);
-    int post[n];
+    int *post=(int*)malloc(sizeof(int)*n);
     for (int i = 0; i < n; i++)
         scanf(" %d", &post[i]);
-    CreatePost(post, n, &t);
+    postorder2bst(post, n, &t);
     printf("\n");
     postorder(t);
     printf("\n");

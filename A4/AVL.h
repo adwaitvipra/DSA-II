@@ -2,16 +2,17 @@
 #define AVL_H
 typedef struct Node
 {
+    char bf;
+    char month[15];
     struct Node *parent;
-    char *monthName[15];
-    struct Node *leftChild, *rightChild;
-    char balanceFactor='0';
-}node;
-typedef node * AVL; //ptr to the node 
+    struct Node *leftChild;
+    struct Node *rightChild;
+} node;
 
+typedef node *AVL; // ptr to the node
 void initAVL(AVL *);
-node* insertNode(AVL *, char *);
-node* removeNode(AVL *, char *);
+int insertNode(AVL *, const char *);
+node* removeNode(AVL *, const char *);
 void traverse(AVL);
 void destroyTree(AVL *);
 #endif
