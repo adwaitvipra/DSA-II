@@ -414,14 +414,3 @@ float Compute(EXP tree)
 			return ans;
 	}
 }
-int main()
-{
-	EXP tree;
-	initTree(&tree);
-	printf("Traversing Given Expression Tree:");
-	Traverse(tree);
-	printf("\n");
-	printf("Answer = %f",Compute(tree));
-	printf("\n");
-	return 0;
-}
