@@ -8,7 +8,7 @@
 
 int main()
 {
-	bst x,y,z;
+	bst x;
 	init_bst(&x, 10);
 	insert_bst(&x, 8);
 	insert_bst(&x, 5);
