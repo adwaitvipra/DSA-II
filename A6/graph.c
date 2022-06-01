@@ -261,12 +261,34 @@ void initGraph(graph *g, char *filename)
     }
     fclose(fh);
 }
+void displayMatrix(graph *g)
+{
+    node *ptr;
+    int **mat;
+    mat = (int **)calloc((g->V), sizeof(int *));
+    for (int x = 0; x < g->V; x++)
+        mat[x] = (int *)calloc((g->V), sizeof(int));
+    int i, j, k;
+    for (i = 0; i < g->V; i++)
+    {
+        ptr = g->A[i];
+        while (ptr)
+        {
+            mat[i][ptr->vertex] = ptr->weight;
+            ptr = ptr->next;
+        }
+    }
+    for (j = 0; j < g->V; j++)
+    {
+        for (k = 0; k < g->V; k++)
+            printf("%d ", mat[j][k]);
+        printf("\n");
+    }
+}
 int main(int argc, char const *argv[])
 {
     graph g;
     initGraph(&g, "graph.txt");
-    printf("%d %d\n", inDegree(&g, 7), outDegree(&g, 7));
-    printf("%d \n", getConnectedVertices(&g, 7));
-    printf("%d \n", isDirected(&g));
+    displayMatrix(&g);
     return 0;
 }
