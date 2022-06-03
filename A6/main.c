@@ -1,8 +1,4 @@
 // Implement Graph using Adjacency List representation. Perform following operations:
-// 1.
-// 2.
-// 3.
-// 4.
 // Initialize the graphs from a file name passed as command line argument.
 // Display graph in matrix form.
 // Perform BSF and DFS starting from a randomly selected vertex.
