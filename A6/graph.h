@@ -7,6 +7,10 @@ typedef struct GraphNode
     int weight;
     struct GraphNode *next;
 } node;
+typedef struct Edge
+{
+    int src, dest, weight;
+} edge;
 typedef struct graph
 {
     node **A;

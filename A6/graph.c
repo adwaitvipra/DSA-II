@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "graph.h"
 //##########################################################################################################################
 //                                         Shortest Path Algoritms
@@ -7,7 +8,21 @@
 //##########################################################################################################################
 //                                          Minimum Spanning Tree
 //##########################################################################################################################
-
+// Prim's Algorithm
+edge *Prims(graph *g)
+{
+    edge *edges;
+    if (!(edges = (edge *)calloc((g->V - 1), sizeof(edge))))
+        return NULL;
+    edge minedge;
+    int minWt, i, j, k;
+    int *visited = (int *)calloc(g->V, sizeof(int));//0->unvisited, 1->visited, 2-> fringed
+    visited[]=1;
+    node *iptr, *jptr;
+    
+    free(visited);
+    return edges;
+}
 //##########################################################################################################################
 //                                                  Stack
 //##########################################################################################################################
@@ -102,8 +117,8 @@ int isFullQ()
     t = (qnode *)malloc(sizeof(qnode));
     if (!t)
         return 1;
-    else
-        return 0;
+    free(t);
+    return 0;
 }
 
 void enqueue(int x)
@@ -158,7 +173,7 @@ void destroyQ()
 void BFS(graph *g, int start)
 {
     int x;
-    node *ptr=NULL;
+    node *ptr = NULL;
     int *visited = (int *)calloc(g->V, sizeof(int)); // init a visited arr with zeros
     enqueue(start);
     visited[start] = 1;
@@ -175,9 +190,11 @@ void BFS(graph *g, int start)
                 visited[ptr->vertex] = 1;
                 printf("%d\n", ptr->vertex);
             }
-            ptr=ptr->next;
+            ptr = ptr->next;
         }
     }
+    free(visited);
+    destroyQ();
     return;
 }
 
@@ -185,29 +202,29 @@ void BFS(graph *g, int start)
 void DFS(graph *g, int start)
 {
     int x;
-    node *ptr=NULL;
+    node *ptr = NULL;
     int *visited = (int *)calloc(g->V, sizeof(int)); // init a visited arr with zeros
     push(top, start);
-    visited[start]=1;
+    visited[start] = 1;
     printf("\n%d\n", start);
-    while(!isEmptyStk(top))
+    while (!isEmptyStk(top))
     {
-        x=pop(top);
-        ptr=g->A[x];
-        while(ptr)
+        x = pop(top);
+        ptr = g->A[x];
+        while (ptr)
         {
-            if(!visited[ptr->vertex])
+            if (!visited[ptr->vertex])
             {
                 push(top, ptr->vertex);
-                visited[ptr->vertex]=1;
+                visited[ptr->vertex] = 1;
                 printf("%d\n", ptr->vertex);
             }
-            ptr=ptr->next;
+            ptr = ptr->next;
         }
     }
     KillStack(top);
+    free(visited);
     return;
-
 }
 //##########################################################################################################################
 //                                              Graph Supporting Algorithms
@@ -316,6 +333,7 @@ void initGraph(graph *g, char *filename)
         }
     }
     fclose(fh);
+    return;
 }
 void displayMatrix(graph *g)
 {
@@ -340,6 +358,8 @@ void displayMatrix(graph *g)
             printf("%d ", mat[j][k]);
         printf("\n");
     }
+    free(mat);
+    return;
 }
 int main(int argc, char const *argv[])
 {

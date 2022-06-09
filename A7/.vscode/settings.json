@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "functional": "c",
+        "stdlib.h": "c",
+        "serialize.h": "c"
+    }
+}
