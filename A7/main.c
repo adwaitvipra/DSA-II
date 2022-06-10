@@ -1,4 +1,4 @@
-// Implement following operations on a Binary File having student records (MIS, Name, Stream, CGPA
+// Implement following operations on a Binary db having student records (MIS, Name, Stream, CGPA
 // etc):
 // Insert Record
 // Search Record by any field
@@ -12,7 +12,12 @@
 
 int main()
 {
-    displayRecords("students.dat");
-    displayStreamCount("students.dat");
+    const char *db = "students.dat";
+    const char *testdb = "test.dat";
+    generateDatabase(db, testdb);
+    displayStreamCount(db);
+    deleteRecordDummy(db, 2);
+    searchRecordByMIS(db, 2);
+    displayStreamCount(db);
     return 0;
 }
