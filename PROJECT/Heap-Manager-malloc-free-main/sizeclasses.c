@@ -13,7 +13,7 @@ int classSizeArray[NUM_OF_CLASSES] = {
 };
 
 /*
- * initSizeClassList : initalizes the sizeclassList when called bymyMalloc for the first time.
+ * initSizeClassList : initalizes the sizeclassList when called by myMalloc for the first time.
  */
 
 void initSizeClassList() {

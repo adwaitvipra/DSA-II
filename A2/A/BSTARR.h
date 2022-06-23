@@ -3,9 +3,9 @@
 #define BST_H
 typedef struct bst
 {
-	int *tree; // arr for storing tree
-	int size;  // maximum capacity of arr tree
-	// int length;//length of arr upto which tree is present, length -1 is the index of last element in tree
+	int *tree;	// arr for storing tree
+	int size;	// maximum capacity of arr tree
+	// int length;	//length of arr upto which tree is present, (length -1) is the index of last element in tree
 } bst;
 
 void init_bst(bst *, int);

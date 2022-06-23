@@ -29,14 +29,14 @@ void initAVL(AVL *tree)
 }
 void adjust(AVL *parentNode) // updates the bf for the ancestors of a node
 {
-    int d;
+    int diff;
     node *currNode = *parentNode;
 
     if (!currNode)
         return;
 
-    d = height(currNode->leftChild) - height(currNode->rightChild);
-    currNode->bf = d >= 0 ? '0' + d : '0' - d;
+    diff = height(currNode->leftChild) - height(currNode->rightChild);
+    currNode->bf = diff >= 0 ? '0' + diff : '0' - diff;
 
     adjust(&(currNode->parent)); // call again to update the parents bf
 }
@@ -86,7 +86,7 @@ void LL_Rotate(node *imbNode)
     adjust(&imbNode);
     return;
 }
-void RR_Rotate(node *imbNode) //
+void RR_Rotate(node *imbNode) 
 {
     node *x = imbNode;
     node *y = imbNode->rightChild;

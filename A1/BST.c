@@ -1,9 +1,6 @@
-#ifndef STD_H
-#define STD_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
 #include "BST.h"
 // stack functions
 struct StackNode *top = NULL; // global ptr to a stack
@@ -65,13 +62,13 @@ int Height(node *p)
     y = Height(p->right);
     return x > y ? x + 1 : y + 1;
 }
-node *FindMax(node *p) // inorder predecessor
+node *FindMax(node *p) // inorder predecessor (max node in left)
 {
     while (p && p->right)
         p = p->right;
     return p;
 }
-node *FindMin(node *p) // inorder successor
+node *FindMin(node *p) // inorder successor (min node in right)
 {
     while (p && p->left)
         p = p->left;
@@ -95,7 +92,7 @@ void initBST(bst *t)
 }
 node *insertNode(bst *t, int x, char *n) // recursive
 {
-    static int flag=0;
+    static int flag = 0; // to check the first recursion
     node *p = *t;
     if (!p)
     {
@@ -106,7 +103,7 @@ node *insertNode(bst *t, int x, char *n) // recursive
     }
     else
     {
-        flag=1;
+        flag = 1;
         if (p->mis < x)
             p->right = insertNode(&p->right, x, n);
         else if (p->mis > x)
@@ -174,7 +171,7 @@ node *search(bst t, int key) // recursive search
 }
 void postorder(bst p) // iterative postorder using stack
 {
-    // there is specific address for negative as well as positive long int and I found that address <-----> long int
+    // there is specific address mapping to negative as well as positive long int and {address <-----> long int}
     long int temp = 0;
     while (p || !IsEmpty(top))
     {

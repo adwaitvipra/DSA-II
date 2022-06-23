@@ -1,9 +1,6 @@
-#ifndef STD_H
-#define STD_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#endif
 #include "BSTARR.h"
 
 void init_bst(bst *t, int n) // mallocs, sets all the elements with min int
@@ -18,7 +15,7 @@ void init_bst(bst *t, int n) // mallocs, sets all the elements with min int
 void insert_bst(bst *t, int x) // non-recursive function
 {
 	int i = 0;
-	if (t->tree[0] == INT_MIN)
+	if (t->tree[0] == INT_MIN)	// empty tree
 	{
 		t->tree[0] = x;
 		return;

@@ -4,7 +4,7 @@
 sizeClass_free_list sizeClassFreeList[NUM_OF_CLASSES];
 
 
-// initSizeClassFreeList : Initializes the sizeclass freelist when it is called for th first time
+// initSizeClassFreeList : Initializes the sizeclass freelist when it is called for the first time
 void initSizeClassFreeList() {
 
     for(int i =0;i<NUM_OF_CLASSES;i++) {
@@ -91,7 +91,7 @@ void addBlocktoSizeClassFreeList(meta_data_block ptr, int size,int offset) {
 }
 
 /*
- * removeAllFreeLitBlocksFromOffset : removes all the memory blocks from the list located at a particular page.
+ * removeAllFreeListBlocksFromOffset : removes all the memory blocks from the list located at a particular page.
  *                                    Called by the free() function when the whole page is unused in order to return 
  *                                    it back to the kernel.
  *                           Params : sizeclass and offset i.e. the location of the page in the sizeclasslist.

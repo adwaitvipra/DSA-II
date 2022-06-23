@@ -111,7 +111,7 @@ void*  myMalloc(size_t bytes) {
             i++;
         }
         meta_data_block ptr,mptr;
-// Getting page from the sizeclassList which has atleast one block avaiable for use
+// Getting page from the sizeClassList which has atleast one block avaiable for use
         ptr = getPageforAllocation(i);
         int k=0;
         while(k<MAX_PAGES && sizeClassList[i][k].head != ptr)

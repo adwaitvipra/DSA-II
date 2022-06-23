@@ -20,6 +20,8 @@ typedef struct graph
 
 void initGraph(graph *, char *);
 void printGraph(graph *);
+int isDirected(graph*);
+int getConnectedVertices(graph *, int);
 int inDegree(graph *, int);
 int outDegree(graph *, int);
 

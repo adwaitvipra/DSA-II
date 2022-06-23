@@ -334,48 +334,55 @@ void DFS(graph *g, int start)
     KillStack(top);
     free(visited);
     return;
-} //##########################################################################################################################
+}
+//##########################################################################################################################
 //                                         Shortest Path Algoritms
 //##########################################################################################################################
+// Dijkstra's Algorithm
+void Dijkstra(graph *g, int start, int end)
+{
+    return;
+}
 //##########################################################################################################################
 //                                          Minimum Spanning Tree
 //##########################################################################################################################
 // Prim's Algorithm
 edge *Prims(graph *g)
 {
-    edge *edges = (edge *)malloc(sizeof(edge) * (g->V - 1));
-    edge minEdge;
-    heap minEdges;
-    initHeap(&minEdges, g->V);
+    edge *mst = (edge *)malloc(sizeof(edge) * (g->V - 1));
+    edge temp;
 
-    int *iptr = NULL, minWt = INT_MAX;
-    int *visited = (int *)calloc(g->V, sizeof(int));
-    int *tree = (int *)calloc(g->V, sizeof(int));
-    int *fringed = (int *)calloc(g->V, sizeof(int));
-    int source, destination;
-    source = 0;
-    visited[source] = 1;
-    tree[source] = 1;
-    iptr = g->A[source];
+    int *visited = (int *)calloc(g->V - 1, sizeof(int));
+    int curr = 0;
+    visited[curr] = 1;
+    node *iptr = g->A[curr];
+
+    heap minEgdes;
+    initHeap(&minEgdes, g->V);
+
     for (int i = 0; i < g->V - 1; i++)
     {
         while (iptr)
         {
-            edge temp;
-            if (!visited[iptr->vertex] && !fringed[iptr->vertex])
+            if (visited[curr] && !visited[iptr->vertex])
             {
-                fringed[iptr->vertex] = 1;
-                temp.src = source;
-                temp.dest = iptr->vertex;
-                temp.weight = iptr->weight;
-                insert(&minEdges, temp);
+                temp.src=curr;
+                temp.dest=iptr->vertex;
+                temp.weight=iptr->weight;
+                insert(&minEgdes, temp);
             }
-            iptr = iptr->next;
+            iptr=iptr->next;
         }
+        mst[i]=returnMin(&minEgdes);
+        curr=mst[i].dest;
+        visited[curr]=1;
+        iptr=g->A[curr];
     }
-
-    return edges;
+    killHeap(&minEgdes);
+    return mst;
 }
+// Kruskal's Algorithm
+
 //##########################################################################################################################
 //                                              Graph Supporting Algorithms
 //##########################################################################################################################
@@ -516,7 +523,15 @@ int main(int argc, char const *argv[])
     graph g;
     initGraph(&g, "graph.txt");
     displayMatrix(&g);
-    BFS(&g, 0);
-    DFS(&g, 0);
+    printf("\n\n");
+    printf("%d is indegree\n", inDegree(&g,0));
+    printf("%d is outdegree\n", outDegree(&g,0));
+    printf("\n\n%d= is Directed\n", isDirected(&g));
+    getConnectedVertices(&g, 0);
+    edge *x = Prims(&g);
+    for (int i = 0; i < (g.V - 1); i++)
+    {
+        printf("\n(%d,%d) = %d\n", x[i].src, x[i].dest, x[i].weight);
+    }
     return 0;
 }
