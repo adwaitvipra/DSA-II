@@ -352,8 +352,8 @@ edge *Prims(graph *g)
     edge *mst = (edge *)malloc(sizeof(edge) * (g->V - 1));
     edge temp;
 
-    int *visited = (int *)calloc(g->V - 1, sizeof(int));
     int curr = 0;
+    int *visited = (int *)calloc(g->V, sizeof(int));
     visited[curr] = 1;
     node *iptr = g->A[curr];
 
@@ -366,17 +366,17 @@ edge *Prims(graph *g)
         {
             if (visited[curr] && !visited[iptr->vertex])
             {
-                temp.src=curr;
-                temp.dest=iptr->vertex;
-                temp.weight=iptr->weight;
+                temp.src = curr;
+                temp.dest = iptr->vertex;
+                temp.weight = iptr->weight;
                 insert(&minEgdes, temp);
             }
-            iptr=iptr->next;
+            iptr = iptr->next;
         }
-        mst[i]=returnMin(&minEgdes);
-        curr=mst[i].dest;
-        visited[curr]=1;
-        iptr=g->A[curr];
+        mst[i] = returnMin(&minEgdes);
+        curr = mst[i].dest;
+        visited[curr] = 1;
+        iptr = g->A[curr];
     }
     killHeap(&minEgdes);
     return mst;
@@ -524,8 +524,8 @@ int main(int argc, char const *argv[])
     initGraph(&g, "graph.txt");
     displayMatrix(&g);
     printf("\n\n");
-    printf("%d is indegree\n", inDegree(&g,0));
-    printf("%d is outdegree\n", outDegree(&g,0));
+    printf("%d is indegree\n", inDegree(&g, 0));
+    printf("%d is outdegree\n", outDegree(&g, 0));
     printf("\n\n%d= is Directed\n", isDirected(&g));
     getConnectedVertices(&g, 0);
     edge *x = Prims(&g);

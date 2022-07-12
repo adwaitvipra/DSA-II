@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <string.h>
 #include <ctype.h>
-#include"AVL.h"
+#include "AVL.h"
 int balanceFactor(AVL currNode)
 {
     int x;
@@ -24,8 +24,8 @@ int height(AVL currNode)
 }
 void initAVL(AVL *tree)
 {
-    *tree=NULL;
-    return ;
+    *tree = NULL;
+    return;
 }
 void adjust(AVL *parentNode) // updates the bf for the ancestors of a node
 {
@@ -46,7 +46,9 @@ node *imbalance(AVL parentNode)
     if (!currNode)
         return NULL;
 
-    if (currNode->bf < ('0' - 1) || currNode->bf > ('0' + 1)) // check for imbalance
+    // if (currNode->bf < ('0' - 1) || currNode->bf > ('0' + 1)) 
+    // check for imbalance
+    if (balanceFactor(currNode) < -1 || balanceFactor(currNode) > 1)
         return currNode;
     imbalance(currNode->parent);
 }
@@ -86,7 +88,7 @@ void LL_Rotate(node *imbNode)
     adjust(&imbNode);
     return;
 }
-void RR_Rotate(node *imbNode) 
+void RR_Rotate(node *imbNode)
 {
     node *x = imbNode;
     node *y = imbNode->rightChild;
@@ -182,7 +184,7 @@ int insertNode(AVL *currNode, const char *x)
 node *removeNode(AVL *currNode, const char *key) // recursive, will return root node when fully executed
 {
     node *link = *currNode;
-strcmp(link->month, key);
+    strcmp(link->month, key);
     if (!link) // empty tree or key not found
         return NULL;
     else if (strcmp(link->month, key) < 0)

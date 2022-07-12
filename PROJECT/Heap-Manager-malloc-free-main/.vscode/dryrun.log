@@ -1,5 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/adu/Karma/DSAII/PROJECT/Heap-Manager-malloc-free-main'
-cc main.c memoryallocator.c sizeclasses.c sizeclassfreelist.c largealloc.c freelist.c -Wall -o app
-make: Leaving directory '/home/adu/Karma/DSAII/PROJECT/Heap-Manager-malloc-free-main'
- 

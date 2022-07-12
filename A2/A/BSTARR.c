@@ -15,7 +15,7 @@ void init_bst(bst *t, int n) // mallocs, sets all the elements with min int
 void insert_bst(bst *t, int x) // non-recursive function
 {
 	int i = 0;
-	if (t->tree[0] == INT_MIN)	// empty tree
+	if (t->tree[0] == INT_MIN) // empty tree
 	{
 		t->tree[0] = x;
 		return;
@@ -35,7 +35,7 @@ void insert_bst(bst *t, int x) // non-recursive function
 }
 void recursive_traverse(bst t, int p)
 {
-	if (p< t.size && t.tree[p] != INT_MIN)
+	if (p < t.size && t.tree[p] != INT_MIN)
 	{
 		recursive_traverse(t, 2 * p + 1); // traverse left subtree
 		printf("%d ", t.tree[p]);		  // print the value
