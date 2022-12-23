@@ -1,22 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "HEAP.h"
 int main()
 {
-    heap h;
-    initHeap(&h, 10);
-    insert(&h,0);
-    insert(&h,10);
-    insert(&h,20);
-    insert(&h,30);
-    insert(&h,40);
-    insert(&h,50);
-    insert(&h,60);
-    insert(&h,70);
-    insert(&h,80);
-    insert(&h,90);
-    int *sorted=heapSort(h);
-    int cnt=h.length+1;
+    heap hobj;
+    initHeap(&hobj, 10);
+    insert(&hobj,0);
+    insert(&hobj,10);
+    insert(&hobj,20);
+    insert(&hobj,30);
+    insert(&hobj,40);
+    insert(&hobj,50);
+    insert(&hobj,60);
+    insert(&hobj,70);
+    insert(&hobj,80);
+    insert(&hobj,90);
+    int *sorted=heapSort(hobj);
+    int cnt=hobj.length+1;
     for(int i=0;i<cnt;i++)
         printf("%d ", sorted[i]);
     printf("\n");

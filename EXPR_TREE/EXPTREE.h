@@ -1,6 +1,7 @@
 #ifndef EXPTREE_H
 #define EXPTREE_H
 #define MAX_SIZE 1024
+
 // Structure Declarations
 // Expression Tree Node Struct
 typedef struct treeNode

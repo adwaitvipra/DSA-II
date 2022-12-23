@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <limits.h>
 #include "HEAP.h"
+
 // Max Heap
 void swap(int *a, int *b)
 {
@@ -10,92 +12,107 @@ void swap(int *a, int *b)
     *b = temp;
     return;
 }
-int isFull(heap *h)
+
+bool isFull(heap *hptr)
 {
-    if (h->length == h->size - 1)
-        return 1;
-    return 0;
+    if (hptr->length == hptr->size - 1)
+        return true;
+    return false;
 }
-int isEmpty(heap *h)
+
+bool isEmpty(heap *hptr)
 {
-    if (h->length == -1)
-        return 1;
-    return 0;
+    if (hptr->length == -1)
+        return true;
+    return false;
 }
-void initHeap(heap *h, int s)
+
+void initHeap(heap *hptr, int size)
 {
-    h->H = (int *)malloc(sizeof(int) * s);
-    h->size = s;
-    h->length = -1;
+    hptr->H = (int *)malloc(sizeof(int) * size);
+    hptr->size = size;
+    hptr->length = -1;
     return;
 }
 
-void insert(heap *h, int x)
+void insert(heap *hptr, int val)
 {
     // 1. Check if given heap is full.
     // 2. If not full then increment length and insert new value at (length)th index in heap.
     // 3. Now heapify until child is in rule (min/max) and parent is greater than root (0)
 
-    if (isFull(h))
-        return;
-    int child = ++h->length;
-    h->H[child] = x;
-    heapify(h, child);
-    return;
-}
-int returnMax(heap *h)
-{
-    // 1. check if given heap is empty.
-    // 2. if not empty then return the rule ele (min/max), swap 0th ele with (h.length)th ele and decrement length
-    // 3. adjust the heap i.e. heapify from top to down
-    if (isEmpty(h))
-        return INT_MIN;
-    int x = h->H[0];
-    swap(&h->H[0], &h->H[h->length--]);
-    adjust(h);
-    return x;
-}
-
-void heapify(heap *h, int child)
-{
-    int parent = (child - 1) / 2;
-    int *n = &h->H[child];
-    int *pn = &h->H[parent];
-
-    if (*n > *pn && (parent >= 0 && child <= h->length))
+	int child;
+    if (isFull(hptr))
+    	;
+    else
     {
-        swap(n, pn);
-        heapify(h, parent);
+    	child = ++(hptr->length);
+    	hptr->H[child] = val;
+    	heapify(hptr, child);
     }
     return;
 }
-void adjust(heap *h)
+
+int returnMax(heap *hptr)
+{
+    // 1. check if given heap is empty.
+    // 2. if not empty then return the rule ele (min/max), swap 0th ele with (h.length)th ele and decrement length
+    // 3. adjust the heap i.e. heapify from top to down'
+
+	int max = INT_MIN;
+    if (!isEmpty(hptr))
+    {
+	    max = hptr->H[0];
+	    swap(&(hptr->H[0]), &(hptr->H[hptr->length--]));
+	    adjust(hptr);
+    }
+
+    return max;
+}
+
+void heapify(heap *hptr, int child)
+{
+    int parent = (child - 1) / 2;
+    int *childNode = &(hptr->H[child]);
+    int *parentNode = &(hptr->H[parent]);
+
+    if (*childNode > *parentNode && (parent >= 0 && child <= hptr->length))
+    {
+        swap(childNode, parentNode);
+        heapify(hptr, parent);
+    }
+
+    return;
+}
+
+void adjust(heap *hptr)
 {
     int parent = 0;
     int max = INT_MIN;
+    int leftChild, rightChild, leftNode, rightNode;
 
-    while (parent <= h->length)
+    while (parent <= hptr->length)
     {
-        int lc = parent * 2 + 1;
-        int rc = parent * 2 + 2;
-        int ln = h->H[lc];
-        int rn = h->H[rc];
+        leftChild = parent * 2 + 1;
+        rightChild = parent * 2 + 2;
+        leftNode = hptr->H[leftChild];
+        rightNode = hptr->H[rightChild];
 
-        if (lc <= h->length)
+        if (leftChild <= hptr->length)
         {
-            if (rc <= h->length) // right child exists
+            if (rightChild <= hptr->length) // right child exists
             {
-                if (ln >= rn) // left node is greater than or equal to right node
-                    max = lc;
+                if (leftNode >= rightNode) // left node is greater than or equal to right node
+                    max = leftChild;
                 else // right node is greater than left node
-                    max = rc;
+                    max = rightChild;
             }
             else // only left child exists
-                max = lc;
+                max = leftChild;
 
-            if (h->H[parent] < h->H[max])
+            if (hptr->H[parent] < hptr->H[max])
             {
-                swap(&h->H[parent], &h->H[max]);
+                swap(&(hptr->H[parent]), &(hptr->H[max]));
                 parent = max;
             }
             else
@@ -107,14 +124,17 @@ void adjust(heap *h)
     return;
 }
 
-int* heapSort(heap h)
+int* heapSort(heap hobj)
 {
-    int *sorted=(int *)malloc(sizeof(int)*(h.length+1));
-    int cnt=h.length+1;
+    int *sorted=NULL;
+    int cnt=hobj.length+1;
+
+    if(!(sorted = (int *)malloc(sizeof(int)*(hobj.length+1))))
+	    return NULL;
+
     for(int i=0;i<cnt;i++)
-    {
-        sorted[i]=returnMax(&h);
-    }
+        sorted[i]=returnMax(&hobj);
+
     return sorted;
 }
 

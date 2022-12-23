@@ -1,20 +1,23 @@
-#ifndef STD_H
-#define STD_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#endif
+#include <stdbool.h>
+#include <limits.h>
 #include "BST.h"
 #define MAX_BST 10
+
 // driver code for program
+
 int main()
 {
-    char str[50];
+    char name[128];
     bst trees[MAX_BST]={0}; // creating a array of BST's
     int num_bst = 0;
     int isInit[MAX_BST] = {0};
-    int choice;
-    int x;
+    int choice=INT_MIN;
+    int x = INT_MIN;
+
     printf("**************** Binary Search Tree ****************\n");
     do
     {
@@ -31,20 +34,27 @@ int main()
         printf("9. Show Available BST's\n");
         printf("10. Exit\n");
         printf("Enter Your Choice:");
+
         scanf(" %d", &choice);
+
         switch (choice)
         {
+		
         case 1:
+		{
 
-            if (num_bst < MAX_BST)
-            {
-                printf("BST Created Succesfully\nBST No.: %d\n\n", num_bst);
-                num_bst++;
-            }
-            else
-                printf("Overflow!\n\n");
+            		if (num_bst < MAX_BST)
+            		{
+                		printf("BST Created Succesfully\nBST No.: %d\n\n", num_bst);
+                		num_bst++;
+           	 }
+            	else
+                	printf("Overflow!\n\n");
             break;
+		}
         case 2:
+		{
+
             printf("Enter BST No.:");
             scanf(" %d", &x);
             if ((x >= 0 && x <= num_bst) && !isInit[x]) // check for valid index and if it is initialized already
@@ -56,7 +66,9 @@ int main()
             else
                 printf("BST not Found or BST initialized already!\n\n");
             break;
+		}
         case 3:
+		{
             printf("Enter BST No.:");
             scanf(" %d", &x);
             if (x >= 0 && x <= num_bst && isInit[x])
@@ -70,7 +82,9 @@ int main()
             else
                 printf("BST not Found or BST uninitialized!\n\n");
             break;
+		}
         case 4:
+		{
             printf("Enter BST No.:");
             scanf(" %d", &x);
             if (x >= 0 && x <= num_bst && isInit[x])
@@ -79,13 +93,15 @@ int main()
                 printf("Enter MIS:");
                 scanf(" %d", &d);
                 printf("Enter Name:");
-                scanf("%s", str);
-                insertNode(&trees[x], d, str);
+                scanf("%s", name);
+                insertNode(&trees[x], d, name);
             }
             else
                 printf("BST not Found or BST uninitialized!\n\n");
             break;
+		}
         case 5:
+		{
             printf("Enter BST No.:");
             scanf(" %d", &x);
             if (x >= 0 && x <= num_bst && isInit[x])
@@ -98,7 +114,9 @@ int main()
             else
                 printf("BST not Found or BST uninitialized!\n\n");
             break;
+		}
         case 6:
+		{
             printf("Enter BST No.:");
             scanf(" %d", &x);
             if (x >= 0 && x <= num_bst && isInit[x])
@@ -106,7 +124,7 @@ int main()
                 int d;
                 printf("Enter MIS:");
                 scanf(" %d", &d);
-                node *temp = search(trees[x], d);
+                node *temp = searchNode(trees[x], d);
                 if (!temp)
                     printf("Not Found!\n");
                 else
@@ -115,7 +133,9 @@ int main()
             else
                 printf("BST not Found or BST uninitialized!\n\n");
             break;
+		}
         case 7:
+		{
             printf("Enter BST No.:");
             scanf(" %d", &x);
             if (x >= 0 && x <= num_bst && isInit[x])
@@ -128,12 +148,14 @@ int main()
             else
                 printf("BST not Found or BST uninitialized!\n\n");
             break;
+		}
         case 8:
+		{
             printf("Enter BST No.:");
             scanf(" %d", &x);
             if (x >= 0 && x <= num_bst && isInit[x])
             {
-                destroyTree(&trees[x]);
+                destroyTree(trees[x]);
                 printf("BST No. : %d, Destroyed...\n\n", x);
                 isInit[x]--;
                 trees[x] = NULL;
@@ -141,7 +163,9 @@ int main()
             else
                 printf("BST not Found or BST uninitialized!\n\n");
             break;
+		}
         case 9:
+		{
             if (num_bst >= 0)
             {
                 for (int i = 0; i <= num_bst; i++)
@@ -151,12 +175,15 @@ int main()
                 }
             }
             break;
+		}
         default:
+		{
             if (choice != 10)
                 printf("Wrong Choice!\nTry Again!\n\n");
             else
                 printf("Thank You!\n\n");
             break;
+		}
         }
         getchar();
         printf("\nPress Any Key\n");

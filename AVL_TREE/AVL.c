@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "AVL.h"
+
 int balanceFactor(AVL currNode)
 {
     int x;
@@ -12,6 +13,7 @@ int balanceFactor(AVL currNode)
     x = currNode->bf > '0' ? currNode->bf - '0' : '0' - currNode->bf;
     return x;
 }
+
 int height(AVL currNode)
 {
     int hl, hr;
@@ -22,11 +24,13 @@ int height(AVL currNode)
     // height of currNode will be whichever is greater of hl and hr plus one
     return hl > hr ? hl + 1 : hr + 1;
 }
+
 void initAVL(AVL *tree)
 {
     *tree = NULL;
     return;
 }
+
 void adjust(AVL *parentNode) // updates the bf for the ancestors of a node
 {
     int diff;
@@ -40,6 +44,7 @@ void adjust(AVL *parentNode) // updates the bf for the ancestors of a node
 
     adjust(&(currNode->parent)); // call again to update the parents bf
 }
+
 node *imbalance(AVL parentNode)
 {
     node *currNode = parentNode;
@@ -50,21 +55,25 @@ node *imbalance(AVL parentNode)
     // check for imbalance
     if (balanceFactor(currNode) < -1 || balanceFactor(currNode) > 1)
         return currNode;
-    imbalance(currNode->parent);
+    return imbalance(currNode->parent);
 }
+
 node *FindMax(node *p) // inorder predecessor
 {
     while (p && p->rightChild)
         p = p->rightChild;
     return p;
 }
+
 node *FindMin(node *p) // inorder successor
 {
     while (p && p->leftChild)
         p = p->leftChild;
     return p;
 }
+
 // rotations
+
 void LL_Rotate(node *imbNode)
 {
     node *x = imbNode;
@@ -88,6 +97,7 @@ void LL_Rotate(node *imbNode)
     adjust(&imbNode);
     return;
 }
+
 void RR_Rotate(node *imbNode)
 {
     node *x = imbNode;
@@ -111,18 +121,21 @@ void RR_Rotate(node *imbNode)
     adjust(&imbNode);
     return;
 }
+
 void LR_Rotate(node *imbNode)
 {
     RR_Rotate(imbNode->leftChild);
     LL_Rotate(imbNode);
     return;
 }
+
 void RL_Rotate(node *imbNode)
 {
     LL_Rotate(imbNode->rightChild);
     RR_Rotate(imbNode);
     return;
 }
+
 void rotation(node *imbNode, node *childNode)
 {
     int bfimb = balanceFactor(imbNode);                                 //
@@ -142,7 +155,9 @@ void rotation(node *imbNode, node *childNode)
         RL_Rotate(imbNode);
     return;
 }
+
 static node *nnins = NULL;
+
 node *auxInsert(node *t, node *pt, const char *x) // root must be passed and root should take return value
 {                                                 // multiple links are modified in this function, returning ptr to a struct Node
     if (!t)
@@ -166,6 +181,7 @@ node *auxInsert(node *t, node *pt, const char *x) // root must be passed and roo
     }
     return t;
 }
+
 int insertNode(AVL *currNode, const char *x)
 {
     node *temp = *currNode;
@@ -180,11 +196,11 @@ int insertNode(AVL *currNode, const char *x)
     }
     return 0;
 }
+
 // Remove Node
 node *removeNode(AVL *currNode, const char *key) // recursive, will return root node when fully executed
 {
     node *link = *currNode;
-    strcmp(link->month, key);
     if (!link) // empty tree or key not found
         return NULL;
     else if (strcmp(link->month, key) < 0)
@@ -237,6 +253,7 @@ node *removeNode(AVL *currNode, const char *key) // recursive, will return root 
     }
     return link;
 }
+
 void traverse(AVL currNode) // inorder traversal
 {
     if (!currNode) // root is not null
@@ -245,6 +262,7 @@ void traverse(AVL currNode) // inorder traversal
     printf("%s\n", currNode->month);
     traverse(currNode->rightChild); // traverse right subtree
 }
+
 void destroyTree(AVL *root)
 {
     node *currentNode = *root;

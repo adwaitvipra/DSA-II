@@ -1,9 +1,7 @@
-#ifndef STD_H
-#define STD_H
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 #include<limits.h>
-#endif
 #include "BSTARR.h"
 
 int main()
@@ -17,7 +15,7 @@ int main()
 	insert_bst(&x, 7);
 	insert_bst(&x, 9);
 	insert_bst(&x, 11);
-	printf("Is BST Complete:\t%s\n",isComplete(x)?"True":"False");
+	printf("Is BST Complete:\t%s\n",is_complete(x)?"True":"False");
 	printf("Recursive Inorder Traverse:\t");
 	recursive_traverse(x, 0);
 	printf("\n");

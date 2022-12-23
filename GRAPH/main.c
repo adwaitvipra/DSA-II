@@ -4,24 +4,30 @@
 // Perform BSF and DFS starting from a randomly selected vertex.
 // Display degree of each vertex. For a directed Graph Display in-degree and out-
 // degree of each node.
-// 5. Find the minimum spanning tree of an undirected weighted graph using any of the
-// 2 algorithms.
-// 6. Find shortest path between any two vertices using Dijkstra’s algorithm
+// Find the minimum spanning tree of an undirected weighted graph using any of the
+// algorithms.
+// Find shortest path between any two vertices using Dijkstra’s algorithm
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <limits.h>
 #include "graph.h"
 
-int main()
+int main(int argc, char const *argv[])
 {
-    graph g;
-    initGraph(&g, "graph.txt");
-    displayMatrix(&g);
-    printf("Is Directed:%d\n", isDirected(&g));
-    edge *x = Prims(&g);
-    for (int i = 0; i < (g.V - 1); i++)
+    graph gobj;
+    initGraph(&gobj, "graph.txt");
+    displayMatrix(&gobj);
+    printf("\n\n");
+    printf("%d is indegree\n", inDegree(&gobj, 0));
+    printf("%d is outdegree\n", outDegree(&gobj, 0));
+    printf("\n\n%d= is Directed\n", isDirected(&gobj));
+    getConnectedVertices(&gobj, 0);
+    edge *x = Prims(&gobj);
+    for (int i = 0; i < (gobj.V - 1); i++)
     {
         printf("\n(%d,%d) = %d\n", x[i].src, x[i].dest, x[i].weight);
     }
-    return 0;
     return 0;
 }

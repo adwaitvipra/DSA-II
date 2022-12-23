@@ -1,13 +1,10 @@
-all: app clean
-app: main.o SERIALIZE.o
-	cc main.o SERIALIZE.o -o app
-
+all: link clean
+link: main.o SERIALIZE.o
+	gcc main.o SERIALIZE.o -o SERIALIZE
 main.o: main.c
-main.c:
-	cc -c main.c -o main.o
+	gcc -Wall -c main.c 
 	
 SERIALIZE.o: SERIALIZE.c
-SERIALIZE.c:
-	cc -c SERIALIZE.c -o SERIALIZE.o
+	gcc -Wall -c SERIALIZE.c
 clean:
 	rm *.o

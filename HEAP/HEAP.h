@@ -1,5 +1,6 @@
 #ifndef HEAP_H
 #define HEAP_H
+
 typedef struct
 {
     int *H;
@@ -7,12 +8,13 @@ typedef struct
     int length;
 } heap;
 
-int isFull(heap*);
-int isEmpty(heap*);
+bool isFull(heap*);
+bool isEmpty(heap*);
 void initHeap(heap *, int);
 void insert(heap *,int);
 int returnMax(heap *);
 void heapify(heap *,int);
 void adjust(heap *);
 int *heapSort(heap);
+
 #endif

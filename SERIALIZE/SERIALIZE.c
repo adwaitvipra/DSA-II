@@ -1,21 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <limits.h>
 #include "SERIALIZE.h"
-#define _OPEN_SYS_ITOA_EXT
+
+void printRecord(student *rec);
+int getStreamIndex(const char *);
+char *getStreamName(const int );
+void displayStreamCount(const char *);
+void generateDatabase(const char *, const char *);
+
 // #######################################################################################################################
 // Inserting the record
 // #######################################################################################################################
-void insertRecord(const char *filename, int x)
+void insertRecord(const char *filename, int cnt)
 {
     FILE *fh;
     fh = fopen(filename, "ab");
-    stud rec;
-    for (int i = 0; i < x; i++)
+    if(!fh)
+	    return;
+    student rec;
+
+    for (int i = 0; i < cnt; i++)
     {
         printf("\nRecord No. %d\n", i + 1);
-        // init records
+        // init record
         printf("\nEnter MIS:");
         scanf("%d", &rec.mis);
         printf("\nEnter Name:");
@@ -24,8 +34,8 @@ void insertRecord(const char *filename, int x)
         scanf(" %s", rec.stream);
         printf("\nEnter CGPA:");
         scanf(" %f", &rec.cgpa);
-        // write records
-        fwrite(&rec, sizeof(stud), 1, fh);
+        // write record
+        fwrite(&rec, sizeof(student), 1, fh);
     }
     fclose(fh);
     return;
@@ -33,7 +43,7 @@ void insertRecord(const char *filename, int x)
 // #######################################################################################################################
 // Search Record by any Field, if the field is not unique returns the array of structs
 // #######################################################################################################################
-void printRecord(stud *rec)
+void printRecord(student *rec)
 {
 
     printf("\n\nMIS             : %d\n", rec->mis);
@@ -42,19 +52,23 @@ void printRecord(stud *rec)
     printf("CGPA            : %.2f\n\n", rec->cgpa);
     return;
 }
-void searchRecordByName(const char *filename, const char *key)
+
+void searchRecordByName(const char *filename, const char *query)
 {
-    FILE *fh = fopen(filename, "rb");
-    // stud *recArr = NULL;
-    stud rec;
+    // student *recArr = NULL;
+    student rec;
     // int recIdx = -1;
     // int recCnt = 0;
-    while (fread(&rec, sizeof(stud), 1, fh))
+    FILE *fh = fopen(filename, "rb");
+    if(!fh)
+	    return ;
+
+    while (fread(&rec, sizeof(student), 1, fh))
     {
 
-        if (!strcmp(key, rec.name))
+        if (!strcmp(query, rec.name))
         {
-            // recArr = (stud *)realloc(recArr, sizeof(stud) * (++recCnt));
+            // recArr = (student *)realloc(recArr, sizeof(student) * (++recCnt));
             // recArr[++recIdx] = rec;
             printRecord(&rec);
         }
@@ -63,90 +77,111 @@ void searchRecordByName(const char *filename, const char *key)
     fclose(fh);
     return;
 }
-void searchRecordByStream(const char *filename, const char *key)
+
+void searchRecordByStream(const char *filename, const char *query)
 {
-    FILE *fh = fopen(filename, "rb");
-    stud rec;
-    // stud *recArr = NULL;
+    student rec;
+    // student *recArr = NULL;
     // int recIdx = -1;
     // int recCnt = 0;
-    while (fread(&rec, sizeof(stud), 1, fh))
+    FILE *fh=NULL;
+
+    if(getStreamIndex(query) == -1)
+	    ;
+    else if((fh = fopen(filename, "rb")))  
     {
-        if (!strcmp(key, rec.stream))
-        {
-            // recArr = (stud *)realloc(recArr, sizeof(stud) * (++recCnt));
-            // recArr[++recIdx] = rec;
-            printRecord(&rec);
-        }
+  	  while (fread(&rec, sizeof(student), 1, fh))
+	    {
+        	if (!strcmp(query, rec.stream))
+        	{
+           	 // recArr = (student *)realloc(recArr, sizeof(student) * (++recCnt));
+          	  // recArr[++recIdx] = rec;
+           	 printRecord(&rec);
+        	}
+	    }
+    	fclose(fh);
     }
     // printf("cnt:%d\n", recCnt);
-    fclose(fh);
     return;
 }
-stud searchRecordByMIS(const char *filename, const int key)
-{
-    FILE *fh = fopen(filename, "rb");
-    stud rec;
-    stud nil = {-1, "NA", "NA", -1};
-    while (fread(&rec, sizeof(stud), 1, fh))
-    {
 
-        if (key == rec.mis)
-        {
-            fclose(fh);
-            printRecord(&rec);
-            return rec;
-        }
-    }
-    fclose(fh);
-    return nil;
-}
-void searchRecordByCGPA(const char *filename, const float key)
+bool searchRecordByMIS(const char *filename, const int key)
 {
-    FILE *fh = fopen(filename, "rb");
-    stud rec;
-    // stud *recArr = NULL;
+    student rec;
+    FILE *fh = NULL; 
+    if(key < 0)
+	    ;
+    else if((fh = fopen(filename, "rb")))
+    {
+	    while (fread(&rec, sizeof(student), 1, fh))
+   	 	{
+			if (key == rec.mis)
+			{
+            			printRecord(&rec);
+            			fclose(fh);
+            			return true;
+        		}
+    		}
+    	fclose(fh);
+    }
+    return false;
+}
+
+bool searchRecordByCGPA(const char *filename, const float key)
+{
+    student rec;
+    // student *recArr = NULL;
     // int recIdx = -1;
     // int recCnt = 0;
-    while (fread(&rec, sizeof(stud), 1, fh))
+    FILE *fh = NULL;
+    if(key < 0.0 && key > 10.0 )
+	    ;
+    else if((fh = fopen(filename, "rb")))
     {
+   	 while (fread(&rec, sizeof(student), 1, fh))
+    	{
 
-        if (key == rec.cgpa)
-        {
-            // recArr = (stud *)realloc(recArr, sizeof(stud) * (++recCnt));
-            // recArr[++recIdx] = rec;
-            printRecord(&rec);
-        }
+        	if (key == rec.cgpa)
+        	{
+            		// recArr = (student *)realloc(recArr, sizeof(student) * (++recCnt));
+            		// recArr[++recIdx] = rec;
+           		 printRecord(&rec);
+			 return true;
+        	}
+    	}
+    	fclose(fh);
     }
     // printf("cnt:%d\n", recCnt);
-    fclose(fh);
-    return;
+    return false;
 }
 // #######################################################################################################################
-// Delete the record, by unique identifier (MIS in this record) {Better to replace the record to be deleted by the dummy }
+// Delete the record, by unique identifier (MIS in this case) {Better to replace the record to be deleted by the dummy}
 // #######################################################################################################################
-int deleteRecordDummy(const char *filename, const int key)
+bool deleteRecordDummy(const char *filename, const int key)
 {
-    FILE *fh = fopen(filename, "wb+");
-    stud rec;
-    long offset=ftell(fh);
-    while (fread(&rec, sizeof(stud), 1, fh))
+    FILE *fh = NULL;
+    student rec;
+    student null_rec = { -1, "NA", "NA", -1}; 
+    long offset;
+
+    if(key < 0)
+	    ;
+    else if((fh = fopen(filename, "rb+")))
     {
-        if (key == rec.mis)
-        {
-            rec.mis = -1;
-            strcpy(rec.name, "NA");
-            strcpy(rec.stream, "NA");
-            rec.cgpa = -1;
-            fseek(fh,offset, SEEK_SET);
-            fwrite(&rec, sizeof(stud), 1, fh);
-            fclose(fh);
-            return 1;
-        }
-        offset=ftell(fh);
+	    while (fread(&rec, sizeof(student), 1, fh))
+	    {
+        	if (key == rec.mis)
+        	{
+        		offset = (ftell(fh)-sizeof(student));
+           	 	fseek(fh,offset, SEEK_SET);
+           	 	fwrite(&null_rec, sizeof(student), 1, fh);
+           	 	fclose(fh);
+            		return true;
+		}
+	    }
+    	fclose(fh);
     }
-    fclose(fh);
-    return 0;
+    return false;
 }
 // #######################################################################################################################
 // Delete the record with the use of new file in which only record to be deleted is not written, rename the new file.
@@ -157,29 +192,36 @@ void deleteRecordFile(const char *filename, const int key)
     // create new file
     // read old file and write to new file until you encounter the key record, ignore the record to be deleted, continue
     // rename the old file with old.dat name (legacy data) and rename new file with filename (old)
-    FILE *fold = fopen(filename, "rb");
-    FILE *fnew = fopen("temp.dat", "ab");
-    stud rec;
-    stud temp = searchRecordByMIS(filename, key);
-    if (temp.mis != -1)
+
+    FILE *fold = NULL; 
+    FILE *fnew = NULL; 
+    student rec;
+    char *newname = NULL;
+
+    if((searchRecordByMIS(filename, key)) && (fold = fopen(filename, "rb"))
+		    && (fnew = fopen("temp.dat", "ab")))
     {
-        while (fread(&rec, sizeof(stud), 1, fold))
-        {
-            if (key == rec.mis)
-                ;
-            else
-                fwrite(&rec, sizeof(stud), 1, fnew);
-        }
-        rename(filename, "old.dat");
-        rename("temp.dat", filename);
+	    while (fread(&rec, sizeof(student), 1, fold))
+        	{
+            		if (key == rec.mis)
+                		;
+            		else
+                		fwrite(&rec, sizeof(student), 1, fnew);
+        	}
+	    newname = strdup(filename);
+	    newname = strcat(newname, "old.dat");
+	    rename(filename, newname);
+	    rename("temp.dat", filename);
+	    free(newname);
+	    fclose(fold);
+	    fclose(fnew);
     }
     else
     {
-        printf("\n\nRECORD NOT FOUND!\n\n");
-        remove("temp.dat");
+	if(fold)
+		fclose(fold);
+        printf("\n\nRECORD NOT FOUND!\nOR OPEN FAILED\n\n");
     }
-    fclose(fold);
-    fclose(fnew);
     return;
 }
 // #######################################################################################################################
@@ -188,11 +230,11 @@ void deleteRecordFile(const char *filename, const int key)
 void displayRecords(const char *filename)
 {
     FILE *fh = fopen(filename, "rb");
-    stud rec;
+    student rec;
     int cnt = 0;
 
-    printf("\t\t\t\tSTUDNETS RECORD\t\t\t\t\n");
-    while (fread(&rec, sizeof(stud), 1, fh))
+    printf("\t\t\t\tSTUDENT'S RECORD\t\t\t\t\n");
+    while (fread(&rec, sizeof(student), 1, fh))
     {
         if (rec.mis == -1)
             ;
@@ -233,6 +275,7 @@ int getStreamIndex(const char *stream)
     else
         return -1;
 }
+
 char *getStreamName(const int key)
 {
     if (key == 0)
@@ -254,9 +297,10 @@ char *getStreamName(const int key)
     else
         return "";
 }
+
 void displayStreamCount(const char *filename)
 {
-    // create arr of stud cnt per stream
+    // create arr of student cnt per stream
     // read every rec from file and inc cnt of corresponding stream
     // display count as per the stream
     FILE *fh = fopen(filename, "rb");
@@ -264,9 +308,13 @@ void displayStreamCount(const char *filename)
     int streamIdx;
     int total=0;
     char tempStream[128];
-    stud rec;
+    student rec;
+
+    if(!fh)
+	    return ;
+
     // get stream count
-    while (fread(&rec, sizeof(stud), 1, fh))
+    while (fread(&rec, sizeof(student), 1, fh))
     {
         streamIdx = getStreamIndex(rec.stream);
         if (streamIdx == -1)
@@ -287,14 +335,3 @@ void displayStreamCount(const char *filename)
     return;
 }
 
-void generateDatabase(const char *tofile, const char *fromfile)
-{
-    FILE *fsample = fopen(fromfile, "r");
-    FILE *fdb = fopen(tofile, "wb");
-    stud rec;
-    while (fread(&rec, sizeof(stud), 1, fsample))
-        fwrite(&rec, sizeof(stud), 1, fdb);
-    fclose(fsample);
-    fclose(fdb);
-    return;
-}

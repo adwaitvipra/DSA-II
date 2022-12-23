@@ -1,59 +1,62 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <limits.h>
 #include "BSTARR.h"
 
-void init_bst(bst *t, int n) // mallocs, sets all the elements with min int
+void init_bst(bst *tptr, int size) // mallocs, sets all the elements with min int
 {
-	int i;
-	t->tree = (int *)malloc(sizeof(int) * n);
-	t->size = n;
-	for (i = 0; i < n; i++) // init arr with min int value
-		t->tree[i] = INT_MIN;
+	tptr->tree = (int *)malloc(sizeof(int) * size);
+	tptr->size = size;
+	for (int i = 0; i < size; i++) // init arr with min int value
+		tptr->tree[i] = INT_MIN;
 	return;
 }
-void insert_bst(bst *t, int x) // non-recursive function
+
+void insert_bst(bst *tptr, int val) // non-recursive function
 {
 	int i = 0;
-	if (t->tree[0] == INT_MIN) // empty tree
+	if (tptr->tree[0] == INT_MIN) // empty tree
 	{
-		t->tree[0] = x;
+		tptr->tree[0] = val;
 		return;
 	}
-	while (i < t->size && t->tree[i] != INT_MIN)
+
+	while (i < tptr->size && tptr->tree[i] != INT_MIN)
 	{
-		if (t->tree[i] == x) // duplicate
+		if (tptr->tree[i] == val) // duplicate
 			return;
-		if (t->tree[i] < x) // right child
+		if (tptr->tree[i] < val) // right child
 			i = 2 * i + 2;
 		else // left child
 			i = 2 * i + 1;
 	}
-	if (i < t->size)
-		t->tree[i] = x;
+	if (i < tptr->size)
+		tptr->tree[i] = val;
 	return;
 }
-void recursive_traverse(bst t, int p)
+
+void recursive_traverse(bst tree, int pidx)
 {
-	if (p < t.size && t.tree[p] != INT_MIN)
+	if (pidx < tree.size && tree.tree[pidx] != INT_MIN)
 	{
-		recursive_traverse(t, 2 * p + 1); // traverse left subtree
-		printf("%d ", t.tree[p]);		  // print the value
-		recursive_traverse(t, 2 * p + 2); // traverse right subtree
+		recursive_traverse(tree, 2 * pidx + 1); // traverse left subtree
+		printf("%d ", tree.tree[pidx]);		  // print the value
+		recursive_traverse(tree, 2 * pidx + 2); // traverse right subtree
 	}
 	return;
 }
-int isComplete(bst t)
+
+bool is_complete(bst tree)
 {
-	int i;
-	int flag = 1;
-	for (i = 0; i < t.size - 1; i++)
+	bool flag = true;
+	for (int i = 0; i < tree.size - 1; i++)
 	{
-		if (t.tree[i] == INT_MIN && t.tree[i + 1] != INT_MIN)
+		if (tree.tree[i] == INT_MIN && tree.tree[i + 1] != INT_MIN)
 		{
-			flag = 0;
+			flag = false;
 			break;
 		}
 	}
-	return flag ? 1 : 0;
+	return flag ? true : false;
 }

@@ -4,19 +4,19 @@
 typedef struct
 {
     int mis;
-    char name[64];
+    char name[128];
     char stream[128];
     float cgpa;
-} stud;
+} student;
 
 void insertRecord(const char *, int);
 void searchRecordByName(const char *, const char *);
 void searchRecordByStream(const char *, const char *);
-stud searchRecordByMIS(const char *, const int);
-void searchRecordByCGPA(const char *, const float);
-int deleteRecordDummy(const char *, const int);
+bool searchRecordByMIS(const char *, const int);
+bool searchRecordByCGPA(const char *, const float);
+bool deleteRecordDummy(const char *, const int);
 void deleteRecordFile(const char *, const int);
 void displayRecords(const char *);
 void displayStreamCount(const char *);
-void generateDatabase(const char *, const char *);
-#endif
+
+#endif // SERIALIZE_H
